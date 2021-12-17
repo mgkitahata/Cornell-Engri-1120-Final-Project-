@@ -132,10 +132,6 @@ function translation_reaction_string_to_human(model::Dict{Symbol,Any})
         compound_translation_table[kegg_name] = human_name
     end
 
-    # hack: -
-    compound_translation_table["C00138"] = "Reduced ferredoxin"
-    compound_translation_table["C00139"] = "Oxidized ferredoxin"
-
     # number of _reactions -
     (number_of_reactions, _) = size(reaction_table)
 
@@ -160,10 +156,10 @@ function translation_reaction_string_to_human(model::Dict{Symbol,Any})
         for (key,value) in stoichiometric_dictionary
 
             # look up this key in the translation table -
-            human_key = get(compound_translation_table, key, "?")
+            human_key = compound_translation_table[key]
 
             if (abs(value) != 1)
-                tmp_phrase = "$(abs(value)) $(human_key)"
+                tmp_phrase = "$(value) $(human_key)"
             else
                 tmp_phrase = "$(human_key)"
             end
@@ -185,6 +181,4 @@ function translation_reaction_string_to_human(model::Dict{Symbol,Any})
         empty!(tmp_reactant_phrase_array)
         empty!(tmp_product_phrase_array)
     end
-
-    return tmp_reaction_string_array
 end
